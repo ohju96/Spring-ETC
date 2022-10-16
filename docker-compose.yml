@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+
+  mariadb:
+    container_name: "ForgettingCurveContainer"
+    image: mariadb:10.5
+    restart: alwys
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234
+    ports:
+      - 3306:3306
+    volumes:
+      - "./mariadb/conf.d:/etc/mysql/conf.d"
+      - "./mariadb/data:/var/lib/mysql"
+    environment:
+      MARIADB_DATABASE: mydb
+      MARIADB_USER: myuser
+      MARIADB_PASSWORD: 1234
+      MARIADB_ROOT_PASSWORD: 1234
+    restart: always
