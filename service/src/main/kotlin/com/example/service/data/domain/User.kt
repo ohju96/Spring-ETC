@@ -1,5 +1,6 @@
 package com.example.service.data.domain
 
+import org.mapstruct.Builder
 import org.springframework.data.annotation.CreatedDate
 import java.time.Instant
 import javax.persistence.Column
@@ -32,5 +33,4 @@ open class User(
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     open val createdAt: Instant,
-
 )
