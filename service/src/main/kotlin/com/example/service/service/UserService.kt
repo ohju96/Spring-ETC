@@ -5,5 +5,7 @@ import com.example.service.data.dto.UserDTO
 interface UserService {
 
     fun createUsers(userDTO: UserDTO)
-    fun deleteUsers(userDTO: UserDTO)
+    fun deleteUsers(userId: String)
+
+    fun getUser(userId: String)
 }

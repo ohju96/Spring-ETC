@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userMapper: UserMapper,
+    private val userMapper: UserMapper, // 정상 동작을 하는 지 체크해 볼 필요가 있다.
     private val userRepository: UserRepository,
 
 ): UserService {
@@ -21,7 +21,12 @@ class UserServiceImpl(
         userRepository.save(userMapper.toEntity(userDTO));
     }
 
-    override fun deleteUsers(userDTO: UserDTO) {
+    override fun deleteUsers(userId: String) {
         logger.info("### .deleteUsers start")
+
+    }
+
+    override fun getUser(userId: String) {
+        
     }
 }
