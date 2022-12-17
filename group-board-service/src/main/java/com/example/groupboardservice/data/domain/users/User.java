@@ -1,5 +1,7 @@
 package com.example.groupboardservice.data.domain.users;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +13,8 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)

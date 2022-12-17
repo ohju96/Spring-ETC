@@ -6,7 +6,6 @@
     <!--로그 파일 저장장소-->
     <property name="log_dir" value="/data/log/SpringBootOracle"/>
 
-
     <!--파일에 로그를 남깁니다.-->
     <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log_dir}/myLog.log</file>
