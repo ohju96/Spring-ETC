@@ -37,8 +37,6 @@ public class JwtTokenProvider {
     @Value("${jwt.token.refresh.name}")
     private String refreshTokenName;
 
-    private final UserService userService;
-
     /**
      * JWT 토큰 (Access Token, Refresh Token) 생성
      * @param userId 회원 아이디
@@ -74,7 +72,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
+/*    public Authentication getAuthentication(String token) {
         log.info(this.getClass().getName() + ".getAuthentication start");
         log.info("getAuthentication : {}", token);
 
@@ -86,7 +84,7 @@ public class JwtTokenProvider {
 
 
 
-    }
+    }*/
 
 
     /**

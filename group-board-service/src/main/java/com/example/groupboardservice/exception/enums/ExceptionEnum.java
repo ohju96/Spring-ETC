@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionEnum {
 
     APP_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "101", "User not found"),
+    APP_EMAIL_ALREADY(HttpStatus.BAD_REQUEST, "102", "This Email is Already in Use"),
+    APP_ID_ALREADY(HttpStatus.BAD_REQUEST, "103", "This Id is Already in Use"),
+    APP_INCORRECT_PASSWORD(HttpStatus.BAD_REQUEST, "104", "Incorrect password"),
 
     ACCESS_DENIED_EXCEPTION(HttpStatus.UNAUTHORIZED, "801", "Access Denied"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "802", "Bad Request"),
