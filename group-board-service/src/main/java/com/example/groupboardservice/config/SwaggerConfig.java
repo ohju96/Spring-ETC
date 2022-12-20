@@ -34,7 +34,8 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(true) // 기본 응답 코드 노출 제외
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.groupboardservice")) // 정의한 api 패키지
-                .paths(PathSelectors.any()) // Controller의 모든 API 문서화하기
+//                .paths(PathSelectors.any()) // Controller의 모든 API 문서화하기
+                .paths(PathSelectors.ant("/api/**")) // /api/..로 시작하는 경로만 문서화 진행하기
                 .build()
                 .apiInfo(apiInfo()); // 문서 정보 저장
     }
