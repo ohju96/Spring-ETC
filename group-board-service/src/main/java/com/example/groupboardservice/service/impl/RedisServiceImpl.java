@@ -1,6 +1,7 @@
 package com.example.groupboardservice.service.impl;
 
 import com.example.groupboardservice.data.dto.RedisDto;
+import com.example.groupboardservice.data.response.ResponseDto;
 import com.example.groupboardservice.repository.redis.RedisMapper;
 import com.example.groupboardservice.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,22 @@ public class RedisServiceImpl implements RedisService {
         int response = redisMapper.saveRedisString(redisKey, redisDto);
 
         log.info(this.getClass().getName() + ".saveRedisString end");
+        return response;
+    }
+
+    @Override
+    public RedisDto getRedisString() {
+        log.info(this.getClass().getName() + ".getRedisString start");
+
+        String redisKey = "ohjuhyeon";
+
+        RedisDto response = redisMapper.getRedisString(redisKey);
+
+        if (response == null) {
+            ResponseDto responseDto = new ResponseDto();
+        }
+
+        log.info(this.getClass().getName() + ".getRedisString end");
         return response;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.groupboardservice.controller;
 
+import com.example.groupboardservice.data.dto.RedisDto;
 import com.example.groupboardservice.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ public class RedisController {
 
     private final RedisService redisService;
 
-    @GetMapping("/redis")
+    @GetMapping("/redis/save")
     public String saveRedisString() {
         log.info(this.getClass().getName() + ".saveRedisString start");
 
@@ -32,5 +33,15 @@ public class RedisController {
 
         log.info(this.getClass().getName() + ".saveRedisString end");
         return msg;
+    }
+
+    @GetMapping("/redis/get")
+    public RedisDto getRedisString() {
+        log.info(this.getClass().getName() + ".getRedisString start");
+
+        RedisDto response = redisService.getRedisString();
+
+        log.info(this.getClass().getName() + ".getRedisString end");
+        return response;
     }
 }
