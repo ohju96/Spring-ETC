@@ -4,6 +4,7 @@ import com.example.groupboardservice.config.auth.JwtTokenProvider;
 import com.example.groupboardservice.config.auth.JwtTokenType;
 import com.example.groupboardservice.config.auth.RoleType;
 import com.example.groupboardservice.data.domain.users.User;
+import com.example.groupboardservice.data.dto.JwtTokenDto;
 import com.example.groupboardservice.data.request.CreateUserRequest;
 import com.example.groupboardservice.data.request.LoginUserRequest;
 import com.example.groupboardservice.exception.CustomException;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String loginUser(LoginUserRequest user) {
+    public JwtTokenDto loginUser(LoginUserRequest user) {
         log.info(this.getClass().getName() + "loginUser start");
 
         User baseUser = userRepository.findById(user.getId());
@@ -66,7 +67,19 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ExceptionEnum.APP_INCORRECT_PASSWORD);
         }
 
+        // Refresh Token 생성
+        String refreshToken = jwtTokenProvider
+                .createToken(baseUser.getId(), baseUser.getRoles(), JwtTokenType.REFRESH_TOKEN);
+        log.info("refreshToken : {}", refreshToken);
+
+        // Access Token 생성
+        String accessToken = jwtTokenProvider
+                .createToken(baseUser.getId(), baseUser.getRoles(), JwtTokenType.ACCESS_TOKEN);
+        log.info("accessToken : {}", accessToken);
+
+        // todo Redis 리프레쉬 토큰 저장 로직 작성 필요!
+
         log.info(this.getClass().getName() + "loginUser end");
-        return jwtTokenProvider.createToken(baseUser.getId(), baseUser.getRoles(), JwtTokenType.ACCESS_TOKEN);
+        return JwtTokenDto.JwtToken(accessToken, refreshToken);
     }
 }
