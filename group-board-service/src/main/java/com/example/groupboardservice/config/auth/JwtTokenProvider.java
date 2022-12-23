@@ -1,5 +1,6 @@
 package com.example.groupboardservice.config.auth;
 
+import com.example.groupboardservice.repository.redis.RedisMapper;
 import com.example.groupboardservice.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -37,6 +38,8 @@ public class JwtTokenProvider {
     @Value("${jwt.token.refresh.name}")
     private String refreshTokenName;
 
+    private final RedisMapper redisMapper;
+
     /**
      * JWT 토큰 (Access Token, Refresh Token) 생성
      * @param userId 회원 아이디
@@ -63,13 +66,18 @@ public class JwtTokenProvider {
         claims.put("roles", roles); // JWT Payload에 정의된 기본 옵션 외 정보를 추가 : 사용자 권한 추가
         Date now = new Date();
 
-        log.info(this.getClass().getName() + ".createToken end !");
-        return Jwts.builder()
+
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + (validTime * 1000)))
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 사용할 암호화 알고리즘과 키
                 .compact();
+
+        redisMapper.saveRefreshToken(token, userId, validTime);
+
+        log.info(this.getClass().getName() + ".createToken end !");
+        return token;
     }
 
 /*    public Authentication getAuthentication(String token) {

@@ -10,6 +10,7 @@ import com.example.groupboardservice.data.request.LoginUserRequest;
 import com.example.groupboardservice.exception.CustomException;
 import com.example.groupboardservice.exception.enums.ExceptionEnum;
 import com.example.groupboardservice.repository.UserRepository;
+import com.example.groupboardservice.repository.redis.RedisMapper;
 import com.example.groupboardservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RedisMapper redisMapper;
 
     @Override
     public void createUser(CreateUserRequest user) {

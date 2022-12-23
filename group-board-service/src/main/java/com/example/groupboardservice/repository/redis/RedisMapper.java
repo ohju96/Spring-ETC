@@ -18,4 +18,7 @@ public interface RedisMapper {
      * @return 결과 값
      */
     RedisDto getRedisString(String redisKey);
+
+    // 리프레쉬 저장
+    boolean saveRefreshToken(String key, String value, long time);
 }

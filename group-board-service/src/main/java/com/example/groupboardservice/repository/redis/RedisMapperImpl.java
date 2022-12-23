@@ -58,7 +58,7 @@ public class RedisMapperImpl implements RedisMapper{
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
 
-        if (redisTemplate.hasKey(redisKey)) { // 데이터가 존재하지 않으면 저장
+        if (redisTemplate.hasKey(redisKey)) { // 데이터가 존재하면
             // Redis에서 가져오기
             String response = (String) redisTemplate.opsForValue().get(redisKey);
             log.info("response : {}", response);
@@ -69,5 +69,30 @@ public class RedisMapperImpl implements RedisMapper{
 
         log.info(this.getClass().getName() + ".getRedisString end");
         return redisDto;
+    }
+
+    @Override
+    public boolean saveRefreshToken(String key, String value, long time) {
+
+        boolean check = false;
+
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+
+        // 데이터가 없으면 저장
+        if (!redisTemplate.hasKey(key)) {
+            String res = (String) redisTemplate.opsForValue().get(key);
+
+            // 데이터 저장하기
+            redisTemplate.opsForValue().set(key, value);
+
+            // Redis에 저장되는 데이터의 유효시간 설정 (TTL)
+            // 1 분이 지나면 자동 삭제
+            redisTemplate.expire(key, time, TimeUnit.SECONDS);
+
+            check = true;
+        }
+
+        return check;
     }
 }

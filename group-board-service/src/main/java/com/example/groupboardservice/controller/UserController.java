@@ -13,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static com.example.groupboardservice.exception.enums.ExceptionEnum.APP_USER_NOT_FOUND;
 
 @RestController
@@ -39,13 +43,28 @@ public class UserController {
     // 로그인
     @Tag(name = "User")
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody LoginUserRequest user) {
+    public ResponseDto login(@RequestBody LoginUserRequest user,
+                             HttpServletRequest request,
+                             HttpServletResponse response) {
         log.info(this.getClass().getName() + ".login start");
 
         // 여기서 리턴 값으로 엑세스 토큰을 받아서 사용해야 한다.
         JwtTokenDto jwtToken = userService.loginUser(user);
 
+        Cookie cookie = new Cookie("refreshToken", jwtToken.getRefreshToken());
+        cookie.setDomain("localhost");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+
+        response.addCookie(cookie);
+
         log.info(this.getClass().getName() + ".login end");
-        return new CustomResponseDto<>(TokenResponse.accessAndRefreshTokenResponse(jwtToken.getAccessToken(), jwtToken.getRefreshToken()));
+        return new CustomResponseDto<>(TokenResponse.accessTokenResponse(jwtToken.getAccessToken()));
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Success";
     }
 }
