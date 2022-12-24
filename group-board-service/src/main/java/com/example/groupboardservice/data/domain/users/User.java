@@ -1,7 +1,10 @@
 package com.example.groupboardservice.data.domain.users;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +14,8 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -29,7 +34,7 @@ public class User {
     @Column
     private String roles;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 
