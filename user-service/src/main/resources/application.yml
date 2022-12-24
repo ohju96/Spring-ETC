@@ -1,18 +1,37 @@
 spring:
+
+
+  profiles:
+    active: window
+
+# app-name
   application:
     name: user-app
 
-  security:
-    user:
-      name: user
-      password: 1234
+# security
+#  security:
+#    user:
+#      name: user
+#      password: 1234
 
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/groupdb?characterEncoding=utf-8
-    username: springetc
-    password: springetc12#
+# jpa
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: false
+    open-in-view: false
+    database: MYSQL
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: 1234
+  # swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  # log
+  logging:
+    level:
+      org.springframework: info

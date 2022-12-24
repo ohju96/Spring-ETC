@@ -1,0 +1,15 @@
+spring:
+
+  config:
+    activate:
+      on-profile: mac
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/groupdb?characterEncoding=utf-8
+    username: springetc
+    password: springetc12#
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 1234

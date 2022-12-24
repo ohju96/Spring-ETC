@@ -1,0 +1,15 @@
+spring:
+
+  config:
+    activate:
+      on-profile: window
+
+  datasource:
+    url: jdbc:mysql://192.168.199.128:3306/groupservicedb?characterEncoding=utf-8
+    username: mydb
+    password: 1234
+
+  redis:
+    host: 192.168.199.128
+    port: 6379
+    password: 1234
