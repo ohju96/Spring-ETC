@@ -1,5 +1,7 @@
 package com.example.groupboardservice.config;
 
+import com.example.groupboardservice.filter.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
+
+    private final CorsConfig corsConfig;
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
     // 비밀번호 암호화 할 때 사용
@@ -52,18 +59,15 @@ public class SecurityConfig {
                 )
 
                 // 세션을 사용하지 않도록 설정
-                .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                .authorizeRequests() // 페이지 접속 권한 설정
-                .antMatchers("/info/**").hasAnyAuthority("ROLE_USER") // 유저 권한
-                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // 관리자 권한
-                .anyRequest().permitAll() // 이 외 나머지 url은 인증을 받지 않아도 접속가능
-                .and()
-                .httpBasic();
-
+            .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeRequests() // 페이지 접속 권한 설정
+            .antMatchers("/info/**").hasAnyAuthority("ROLE_USER") // 유저 권한
+            .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // 관리자 권한
+            .anyRequest().permitAll() // 이 외 나머지 url은 인증을 받지 않아도 접속가능
+            .and()
+            .httpBasic();
         return http.build();
     }
-
 
 }
 

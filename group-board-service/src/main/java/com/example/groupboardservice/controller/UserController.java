@@ -7,10 +7,13 @@ import com.example.groupboardservice.data.response.CustomResponseDto;
 import com.example.groupboardservice.data.response.ResponseDto;
 import com.example.groupboardservice.data.response.TokenResponse;
 import com.example.groupboardservice.exception.CustomException;
+import com.example.groupboardservice.repository.redis.RedisMapper;
+import com.example.groupboardservice.service.CookieService;
 import com.example.groupboardservice.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +30,11 @@ import static com.example.groupboardservice.exception.enums.ExceptionEnum.APP_US
 public class UserController {
 
     private final UserService userService;
+    private final CookieService cookieService;
+    private final RedisMapper redisMapper;
+
+    @Value("${jwt.token.refresh.valid.time}")
+    private long refreshTokenValidTime;
 
     // 회원가입
     @Tag(name = "User")
@@ -44,20 +52,15 @@ public class UserController {
     @Tag(name = "User")
     @PostMapping("/login")
     public ResponseDto login(@RequestBody LoginUserRequest user,
-                             HttpServletRequest request,
                              HttpServletResponse response) {
         log.info(this.getClass().getName() + ".login start");
 
         // 여기서 리턴 값으로 엑세스 토큰을 받아서 사용해야 한다.
         JwtTokenDto jwtToken = userService.loginUser(user);
 
-        Cookie cookie = new Cookie("refreshToken", jwtToken.getRefreshToken());
-        cookie.setDomain("localhost");
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
+        Cookie refreshToken = cookieService.createCookie("refreshToken", jwtToken.getRefreshToken());
 
-        response.addCookie(cookie);
+        redisMapper.saveRefreshToken("refreshToken", jwtToken.getRefreshToken(), refreshTokenValidTime);
 
         log.info(this.getClass().getName() + ".login end");
         return new CustomResponseDto<>(TokenResponse.accessTokenResponse(jwtToken.getAccessToken()));

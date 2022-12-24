@@ -80,7 +80,6 @@ public class UserServiceImpl implements UserService {
                 .createToken(baseUser.getId(), baseUser.getRoles(), JwtTokenType.ACCESS_TOKEN);
         log.info("accessToken : {}", accessToken);
 
-        // todo Redis 리프레쉬 토큰 저장 로직 작성 필요!
 
         log.info(this.getClass().getName() + "loginUser end");
         return JwtTokenDto.JwtToken(accessToken, refreshToken);

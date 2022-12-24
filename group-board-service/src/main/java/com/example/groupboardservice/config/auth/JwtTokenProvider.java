@@ -74,7 +74,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 사용할 암호화 알고리즘과 키
                 .compact();
 
-        redisMapper.saveRefreshToken(token, userId, validTime);
+//        redisMapper.saveRefreshToken(token, userId, validTime);
 
         log.info(this.getClass().getName() + ".createToken end !");
         return token;

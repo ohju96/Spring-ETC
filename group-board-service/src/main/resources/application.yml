@@ -14,18 +14,23 @@ spring:
       resourceserver:
 
   ## MySQL
-#  datasource:
-#    url: jdbc:mysql://127.0.0.1:3306/groupdb?characterEncoding=utf-8
-#    username: springetc
-#    password: springetc12#
-
   datasource:
-    url: jdbc:mysql://192.168.199.128:3306/groupservicedb?characterEncoding=utf-8
-    username: mydb
-    password: 1234
+    url: jdbc:mysql://127.0.0.1:3306/groupdb?characterEncoding=utf-8
+    username: springetc
+    password: springetc12#
+#
+#  datasource:
+#    url: jdbc:mysql://192.168.199.128:3306/groupservicedb?characterEncoding=utf-8
+#    username: mydb
+#    password: 1234
+#
+#  redis:
+#    host: 192.168.199.128
+#    port: 6379
+#    password: 1234
 
   redis:
-    host: 192.168.199.128
+    host: 127.0.0.1
     port: 6379
     password: 1234
 
