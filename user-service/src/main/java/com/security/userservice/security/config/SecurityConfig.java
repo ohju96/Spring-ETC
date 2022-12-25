@@ -91,7 +91,9 @@ public class SecurityConfig {
             .loginPage("/login") // 로그인 경로
             .loginProcessingUrl("/login_proc") // 로그인 페이지의 action 값
             .defaultSuccessUrl("/") // 로그인 성공 후 이동하는 경로
-            .permitAll() // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
+            .permitAll(); // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
+        http
+                .logout()
         ;
         return http.build();
     }
