@@ -2,6 +2,7 @@ package com.security.userservice.security.provider;
 
 import com.security.userservice.security.service.AccountContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Slf4j
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -22,14 +24,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
+        log.info("username : {}", username);
+        log.info("password : {}", password);
 
         // 이름으로 accountContext 데이터를 가져온다.
         AccountContext accountContext = (AccountContext) userDetailsService.loadUserByUsername(username);
+        log.info("password account: {}", accountContext.getAccount().getPassword());
+        log.info("password : {}", accountContext.getPassword());
 
         // 암호가 일치하는 지 확인
-        if (passwordEncoder.matches(password, accountContext.getAccount().getPassword())) {
+        if (!passwordEncoder.matches(password, accountContext.getAccount().getPassword())) {
+            log.info("불일치");
             throw new BadCredentialsException("BadCredentialsException");
         }
+        log.info("일치");
 
         // 비밀버호는 보안상 노출을 하지 않기 위해 null로 넣는다.
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
