@@ -24,7 +24,7 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final AuthenticationDetailsSource authenticationDetailsSource;
-    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler; //커스텀 로그인 핸들러
 
 /*    // 임시 유저 생성, 회원가입 기능 만들고 나서 주석 처리
     @Bean
@@ -96,7 +96,7 @@ public class SecurityConfig {
             .loginProcessingUrl("/login_proc") // 로그인 페이지의 action 값
             .authenticationDetailsSource(authenticationDetailsSource) // 파라미터 설정 및 재생
             .defaultSuccessUrl("/") // 로그인 성공 후 이동하는 경로
-            .successHandler(customAuthenticationSuccessHandler)
+            .successHandler(customAuthenticationSuccessHandler) // 로그인 성공 커스텀 핸들러
             .permitAll(); // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
         http
                 .logout()
