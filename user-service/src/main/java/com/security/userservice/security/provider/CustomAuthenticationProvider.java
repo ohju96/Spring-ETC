@@ -1,10 +1,13 @@
 package com.security.userservice.security.provider;
 
+import com.security.userservice.security.common.FormAuthenticationDetailsSource;
+import com.security.userservice.security.common.FormWebAuthenticationDetails;
 import com.security.userservice.security.service.AccountContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -35,8 +38,18 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // 암호가 일치하는 지 확인
         if (!passwordEncoder.matches(password, accountContext.getAccount().getPassword())) {
             log.info("불일치");
-            throw new BadCredentialsException("BadCredentialsException");
+            throw new BadCredentialsException("Invalid password");
         }
+
+        FormWebAuthenticationDetails formWebAuthenticationDetails
+                = (FormWebAuthenticationDetails) authentication.getDetails();
+
+        String secretKey = formWebAuthenticationDetails.getSecretKey();
+
+        if (secretKey == null || !"secret".equals(secretKey)) {
+            throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
+        }
+
         log.info("일치");
 
         // 비밀버호는 보안상 노출을 하지 않기 위해 null로 넣는다.
