@@ -1,11 +1,6 @@
 package com.example.springdemo.domain;
 
-import lombok.Getter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Stock {
@@ -14,8 +9,11 @@ public class Stock {
     private Long id;
     private Long productId;
     private Long quantity;
+    @Version
+    private Long version;
 
     public Stock() {
+
     }
 
     public Stock(Long productId, Long quantity) {
