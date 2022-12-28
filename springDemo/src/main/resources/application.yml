@@ -4,7 +4,9 @@ spring:
     url: jdbc:mysql://192.168.199.128:3306/stock_example?characterEncoding=utf-8
     username: mydb
     password: 1234
-#  datasource:
+    hikari:
+      maximum-pool-size: 40
+  #  datasource:
 #    url: jdbc:mysql://127.0.0.1:3306/stock_example?characterEncoding=utf-8
 #    username: springetc
 #    password: springetc12#
