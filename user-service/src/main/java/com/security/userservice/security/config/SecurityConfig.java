@@ -1,5 +1,6 @@
 package com.security.userservice.security.config;
 
+import com.security.userservice.security.filter.AjaxLoginProcessingFilter;
 import com.security.userservice.security.handler.CustomAccessDeniedHandler;
 import com.security.userservice.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -84,6 +86,7 @@ public class SecurityConfig {
         return new CustomAuthenticationProvider(userDetailsService, passwordEncoder());
     }
 
+    // 인증 거부 처리를 위한 핸들러
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
@@ -100,7 +103,8 @@ public class SecurityConfig {
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
-            .anyRequest().authenticated();
+            .anyRequest().authenticated()
+        ;
         http
             .formLogin()
             .loginPage("/login") // 로그인 경로
@@ -109,13 +113,22 @@ public class SecurityConfig {
             .authenticationDetailsSource(authenticationDetailsSource) // 파라미터 설정 및 재생
             .successHandler(customAuthenticationSuccessHandler) // 로그인 성공 커스텀 핸들러
             .failureHandler(customAuthenticationFailureHandler) // 로그인 실패 커스텀 핸들
-            .permitAll(); // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
+            .permitAll()
+        ; // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
         http
-                .logout();
+                .logout()
+        ;
         http
             .exceptionHandling()
             .accessDeniedHandler(accessDeniedHandler())
         ;
+        http
+            // 기존 필터 앞에서 처리하기 위해 before 필터 사용
+            .addFilterBefore(new AjaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+        ;
+        http
+            .csrf().disable()
+            ;
         return http.build();
     }
 }
