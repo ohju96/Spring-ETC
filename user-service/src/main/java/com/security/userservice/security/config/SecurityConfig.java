@@ -1,5 +1,6 @@
 package com.security.userservice.security.config;
 
+import com.security.userservice.security.handler.CustomAccessDeniedHandler;
 import com.security.userservice.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -82,6 +84,13 @@ public class SecurityConfig {
         return new CustomAuthenticationProvider(userDetailsService, passwordEncoder());
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        accessDeniedHandler.setErrorPage("/denied");
+        return accessDeniedHandler;
+    }
+
     // 시큐리티 필터 체인 구현
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -102,7 +111,10 @@ public class SecurityConfig {
             .failureHandler(customAuthenticationFailureHandler) // 로그인 실패 커스텀 핸들
             .permitAll(); // 로그인 페이지는 인증 받지 않은 사용자도 접근 가능하다.
         http
-                .logout()
+                .logout();
+        http
+            .exceptionHandling()
+            .accessDeniedHandler(accessDeniedHandler())
         ;
         return http.build();
     }
